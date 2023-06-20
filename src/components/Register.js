@@ -1,5 +1,3 @@
-import "./Login.css";
-
 export default function Register() {
   return (
     <div className="login__container">
