@@ -8,6 +8,11 @@ import EditAvatarPopup from "./EditAvatarPopup";
 import ImagePopup from "./ImagePopup";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { api } from "../utils/api";
+import { Route, Routes } from "react-router-dom";
+import Login from "./Login";
+import Register from "./Register";
+import { ProtectedRoute } from "./ProtectedRoute";
+import InfoTooltip from "./InfoTooltip";
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState("");
@@ -17,6 +22,12 @@ export default function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({ name: "", link: "" });
   const [isLoading, setIsLoading] = useState(false);
+
+  //проверяем авторизацю
+  const [isLoggedIn, setLoggedIn] = useState(false);
+
+  //попап при авторизации/регистрации
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
 
   useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
@@ -37,14 +48,15 @@ export default function App() {
 
   //закрытие на ESC
   useEffect(() => {
-    const close = (e) => {
-      if (e.key === "Escape") {
+    const close = (evt) => {
+      if (evt.key === "Escape") {
         closeAllPopups();
       }
     };
     window.addEventListener("keydown", close);
   }, []);
 
+  //открытие попапов
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
   }
@@ -61,6 +73,11 @@ export default function App() {
     setSelectedCard(card);
   }
 
+  function handleInfoTooltipOpen() {
+    setIsInfoTooltipOpen(true);
+  }
+
+  //лайк
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
@@ -78,6 +95,7 @@ export default function App() {
       });
   }
 
+  //удаление
   function handleCardDelete(card) {
     api
       .deleteCard(card._id)
@@ -89,6 +107,7 @@ export default function App() {
       });
   }
 
+  //изменение информации профиля
   function handleUpdateUser(data) {
     setIsLoading(true);
     api
@@ -105,6 +124,7 @@ export default function App() {
       });
   }
 
+  //изменение аватара
   function handleUpdateAvatar(data) {
     setIsLoading(true);
     api
@@ -121,6 +141,7 @@ export default function App() {
       });
   }
 
+  //добавление карточки
   function handleAddPlaceSubmit(data) {
     setIsLoading(true);
     api
@@ -137,11 +158,13 @@ export default function App() {
       });
   }
 
+  //закрытие попапов
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setSelectedCard({ name: "", link: "" });
+    setIsInfoTooltipOpen(false);
   }
 
   return (
@@ -149,18 +172,33 @@ export default function App() {
       <div className="page">
         <div className="page__container">
           <Header />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute
+                  isLoggedIn={isLoggedIn}
+                  element={Main}
+                  onEditProfile={handleEditProfileClick}
+                  onAddPlace={handleAddPlaceClick}
+                  onEditAvatar={handleEditAvatarClick}
+                  onCardClick={handleCardClick}
+                  onCardLike={handleCardLike}
+                  onCardDelete={handleCardDelete}
+                  cards={cards}
+                  footer={Footer}
+                />
+              }
+            />
+            <Route path="/signup" element={<Register />} />
+            <Route path="/signin" element={<Login />} />
+          </Routes>
 
-          <Main
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
-            onEditAvatar={handleEditAvatarClick}
-            onCardClick={handleCardClick}
-            onCardLike={handleCardLike}
-            onCardDelete={handleCardDelete}
-            cards={cards}
-          />
-
-          <Footer />
+          {/* <InfoTooltip
+            isOpen={handleInfoTooltipOpen}
+            onClose={closeAllPopups}
+            name={"tooltip"}
+          /> */}
 
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
