@@ -3,3 +3,9 @@
   height: 120px;
   margin: 26px 119px 32px;
 }
+
+@media screen and (max-width: 550px) {
+  .popup__tooltip-img {
+    margin: 25px 80px 40px;
+  }
+}

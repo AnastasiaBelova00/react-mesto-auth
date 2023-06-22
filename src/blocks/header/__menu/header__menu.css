@@ -4,4 +4,22 @@
   line-height: 22px;
   padding-top: 51px;
   margin: 0;
+  opacity: 1;
+  transition: opacity 0.2s ease 0.1s;
+  text-decoration: none;
+  color: white;
+}
+
+.header__menu:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 880px) {
+  .header__menu {
+    padding-right: 30px;
+    font-size: 14px;
+    line-height: 16.94px;
+    padding-top: 34px;
+  }
 }

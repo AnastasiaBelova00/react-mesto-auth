@@ -5,4 +5,12 @@
   margin: 0;
   padding-top: 15px;
   text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+@media screen and (max-width: 450px) {
+  .login__subtitle {
+    padding-top: 20px;
+  }
 }

@@ -15,7 +15,7 @@ export default function InfoTooltip(name, isOpen, onClose) {
           aria-label="Кнопка закрытия"
         ></button>
         <img className="popup__tooltip-img" src={yesAuth} />
-        <h2 className="popup__title">Вы успешно зарегистрировались!</h2>
+        <h2 className="popup__tooltip-title">Вы успешно зарегистрировались!</h2>
       </div>
     </div>
   );
