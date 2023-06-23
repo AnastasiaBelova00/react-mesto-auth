@@ -8,11 +8,12 @@ import EditAvatarPopup from "./EditAvatarPopup";
 import ImagePopup from "./ImagePopup";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { api } from "../utils/api";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
 import { ProtectedRoute } from "./ProtectedRoute";
 import InfoTooltip from "./InfoTooltip";
+import * as auth from "../utils/auth";
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState("");
@@ -28,6 +29,29 @@ export default function App() {
 
   //попап при авторизации/регистрации
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
+
+  const navigate = useNavigate();
+
+  //проверка токена
+  function checkToken() {
+    const jwt = localStorage.getItem("jwt");
+    auth
+      .getContent(jwt)
+      .then((data) => {
+        if (!data) {
+          return;
+        }
+        setLoggedIn(true);
+        navigate("/");
+      })
+      .catch((err) => {
+        setLoggedIn(false);
+      });
+  }
+
+  useEffect(() => {
+    checkToken();
+  }, []);
 
   useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
@@ -76,6 +100,10 @@ export default function App() {
   function handleInfoTooltipOpen() {
     setIsInfoTooltipOpen(true);
   }
+
+  // function handleLogin() {
+  //   setLoggedIn(true);
+  // }
 
   //лайк
   function handleCardLike(card) {
@@ -191,7 +219,10 @@ export default function App() {
               }
             />
             <Route path="/signup" element={<Register />} />
-            <Route path="/signin" element={<Login />} />
+            <Route
+              path="/signin"
+              element={<Login handleLogin={() => setLoggedIn(true)} />}
+            />
           </Routes>
 
           {/* <InfoTooltip
