@@ -33,6 +33,7 @@ export default function App() {
   //данные юзера после авторизации
   const [userData, setUserData] = useState(null);
 
+  //стейт для проверки регистрации
   const [isRegistered, setRegistered] = useState(false);
 
   const navigate = useNavigate();
