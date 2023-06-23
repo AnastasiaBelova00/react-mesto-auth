@@ -27,11 +27,13 @@ export default function App() {
   //проверяем авторизацю
   const [isLoggedIn, setLoggedIn] = useState(false);
 
-  //попап при авторизации/регистрации
-  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
+  //попап при регистрации
+  const [isInfoTooltipOpen, setInfoTooltipOpen] = useState(false);
 
   //данные юзера после авторизации
   const [userData, setUserData] = useState(null);
+
+  const [isRegistered, setRegistered] = useState(false);
 
   const navigate = useNavigate();
 
@@ -57,9 +59,40 @@ export default function App() {
     checkToken();
   }, []);
 
+  //выход
   function logOut() {
     localStorage.removeItem("jwt");
     navigate("/signin");
+  }
+
+  //функция регистрации
+  function handleRegistration(email, password) {
+    auth
+      .register(email, password)
+      .then((data) => {
+        setRegistered(true);
+        setInfoTooltipOpen(true);
+        navigate("/signin");
+      })
+      .catch((err) => {
+        console.error(`Ошибка: ${err}`);
+        setRegistered(false);
+        setInfoTooltipOpen(true);
+      });
+  }
+
+  //функция логина
+  function handleLogin(email, password) {
+    auth
+      .authorize(email, password)
+      .then((data) => {
+        localStorage.setItem("jwt", data.token);
+        handleLogin();
+        navigate("/");
+      })
+      .catch((err) => {
+        console.error(`Ошибка: ${err}`);
+      });
   }
 
   useEffect(() => {
@@ -201,7 +234,7 @@ export default function App() {
     setIsEditAvatarPopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setSelectedCard({ name: "", link: "" });
-    setIsInfoTooltipOpen(false);
+    setInfoTooltipOpen(false);
   }
 
   return (
@@ -227,18 +260,21 @@ export default function App() {
                 />
               }
             />
-            <Route path="/signup" element={<Register />} />
+            <Route
+              path="/signup"
+              element={<Register handleRegistration={handleRegistration} />}
+            />
             <Route
               path="/signin"
-              element={<Login handleLogin={() => setLoggedIn(true)} />}
+              element={<Login handleLogin={handleLogin} />}
             />
           </Routes>
 
-          {/* <InfoTooltip
+          <InfoTooltip
             isOpen={isInfoTooltipOpen}
             onClose={closeAllPopups}
-            name={"tooltip"}
-          /> */}
+            isRegistered={isRegistered}
+          />
 
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
