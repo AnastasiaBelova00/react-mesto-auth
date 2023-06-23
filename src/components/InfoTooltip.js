@@ -1,12 +1,13 @@
 import yesAuth from "../images/Union.png";
 import noAuth from "../images/Unionnot.png";
 
-export default function InfoTooltip(name, isOpen, onClose) {
+export default function InfoTooltip({ isOpen, onClose, isRegistered }) {
+  const image = isRegistered ? yesAuth : noAuth;
+  const title = isRegistered
+    ? "Вы успешно зарегистрировались!"
+    : "Что-то пошло не так! Попробуйте ещё раз";
   return (
-    <div
-      className={`popup popup_type_${name} ${isOpen ? "popup_opened" : ""}`}
-      onClick={onClose}
-    >
+    <div className={`popup ${isOpen ? "popup_opened" : ""}`} onClick={onClose}>
       <div className="popup__container" onClick={(e) => e.stopPropagation()}>
         <button
           className="popup__button-exit"
@@ -14,8 +15,8 @@ export default function InfoTooltip(name, isOpen, onClose) {
           type="button"
           aria-label="Кнопка закрытия"
         ></button>
-        <img className="popup__tooltip-img" src={yesAuth} />
-        <h2 className="popup__tooltip-title">Вы успешно зарегистрировались!</h2>
+        <img className="popup__tooltip-img" src={image} />
+        <h2 className="popup__tooltip-title">{title}</h2>
       </div>
     </div>
   );

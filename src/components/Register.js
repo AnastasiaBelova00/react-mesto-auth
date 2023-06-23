@@ -1,8 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import * as auth from "../utils/auth";
+import InfoTooltip from "./InfoTooltip";
 
-export default function Register() {
+export default function Register({ handleRegistration }) {
   const navigate = useNavigate();
 
   const [formValue, setFormValue] = useState({
@@ -22,14 +23,17 @@ export default function Register() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const { email, password } = formValue;
-    auth
-      .register(email, password)
-      .then((data) => {
-        navigate("/signin");
-      })
-      .catch((err) => {
-        console.error(`Ошибка: ${err}`);
-      });
+    handleRegistration(email, password);
+    // auth
+    //   .register(email, password)
+    //   .then((data) => {
+    //     handleInfoTooltipOpen();
+    //     navigate("/signin");
+    //   })
+    //   .catch((err) => {
+    //     console.error(`Ошибка: ${err}`);
+    //     handleInfoTooltipOpen();
+    //   });
   };
 
   return (

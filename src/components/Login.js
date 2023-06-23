@@ -1,10 +1,6 @@
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import * as auth from "../utils/auth";
 
 export default function Login({ handleLogin }) {
-  const navigate = useNavigate();
-
   const [formValue, setFormValue] = useState({
     email: "",
     password: "",
@@ -21,18 +17,8 @@ export default function Login({ handleLogin }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const { email, password } = formValue;
-    auth
-      .authorize(email, password)
-      .then((data) => {
-        localStorage.setItem("jwt", data.token);
-        handleLogin();
-        navigate("/");
-      })
-      .catch((err) => {
-        console.error(`Ошибка: ${err}`);
-      });
+    handleLogin(email, password);
   };
 
   return (
