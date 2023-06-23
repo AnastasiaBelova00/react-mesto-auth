@@ -38,28 +38,6 @@ export default function App() {
 
   const navigate = useNavigate();
 
-  //проверка токена
-  function checkToken() {
-    const jwt = localStorage.getItem("jwt");
-    auth
-      .getContent(jwt)
-      .then((data) => {
-        if (!data) {
-          return;
-        }
-        setUserData(data.data.email);
-        setLoggedIn(true);
-        navigate("/");
-      })
-      .catch((err) => {
-        setLoggedIn(false);
-      });
-  }
-
-  useEffect(() => {
-    checkToken();
-  }, []);
-
   //выход
   function logOut() {
     localStorage.removeItem("jwt");
@@ -88,13 +66,35 @@ export default function App() {
       .authorize(email, password)
       .then((data) => {
         localStorage.setItem("jwt", data.token);
-        handleLogin();
         navigate("/");
       })
       .catch((err) => {
         console.error(`Ошибка: ${err}`);
       });
   }
+
+  //проверка токена
+  function checkToken() {
+    const jwt = localStorage.getItem("jwt");
+    auth
+      .getContent(jwt)
+      .then((data) => {
+        if (!data) {
+          return;
+        }
+        setUserData(data.data.email);
+        setLoggedIn(true);
+        navigate("/");
+      })
+      .catch((err) => {
+        setLoggedIn(false);
+      });
+  }
+
+  useEffect(() => {
+    checkToken();
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
@@ -121,7 +121,15 @@ export default function App() {
       }
     };
     window.addEventListener("keydown", close);
-  }, []);
+    return () => {
+      window.removeEventListener("keydown", close);
+    };
+  }, [
+    isAddPlacePopupOpen,
+    isEditAvatarPopupOpen,
+    isEditProfilePopupOpen,
+    isInfoTooltipOpen,
+  ]);
 
   //открытие попапов
   function handleEditAvatarClick() {

@@ -1,7 +1,9 @@
 import logoMesto from "../images/header-logo.svg";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function Header({ userData, logOut }) {
+  const location = useLocation();
+
   return (
     <header className="header">
       <img
@@ -11,7 +13,27 @@ export default function Header({ userData, logOut }) {
       />
 
       <div className="header__information">
-        <Routes>
+        {location.pathname === "/signin" && (
+          <Link to="/signup" className="header__menu">
+            Регистрация
+          </Link>
+        )}
+        {location.pathname === "/signup" && (
+          <Link to="/signin" className="header__menu">
+            Войти
+          </Link>
+        )}
+
+        {location.pathname === "/" && (
+          <>
+            <p className="header__email">{userData}</p>
+            <Link to="/signin" className="header__menu" onClick={logOut}>
+              Выйти
+            </Link>
+          </>
+        )}
+
+        {/* <Routes>
           <Route
             path="/signin"
             element={
@@ -41,12 +63,8 @@ export default function Header({ userData, logOut }) {
               </>
             }
           ></Route>
-          {/* 
-          <Route
-            path="/"
-            element={<p className="header__email">{userData}</p>}
-          ></Route> */}
-        </Routes>
+          
+        </Routes> */}
       </div>
     </header>
   );
