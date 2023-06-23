@@ -26,7 +26,7 @@ export default function Login({ handleLogin }) {
     auth
       .authorize(email, password)
       .then((data) => {
-        localStorage.setItem("jwt", data.jwt);
+        localStorage.setItem("jwt", data.token);
         handleLogin();
         navigate("/");
       })

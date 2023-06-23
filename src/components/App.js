@@ -30,6 +30,9 @@ export default function App() {
   //попап при авторизации/регистрации
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
 
+  //данные юзера после авторизации
+  const [userData, setUserData] = useState(null);
+
   const navigate = useNavigate();
 
   //проверка токена
@@ -41,6 +44,7 @@ export default function App() {
         if (!data) {
           return;
         }
+        setUserData(data.data.email);
         setLoggedIn(true);
         navigate("/");
       })
@@ -52,6 +56,11 @@ export default function App() {
   useEffect(() => {
     checkToken();
   }, []);
+
+  function logOut() {
+    localStorage.removeItem("jwt");
+    navigate("/signin");
+  }
 
   useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
@@ -97,9 +106,9 @@ export default function App() {
     setSelectedCard(card);
   }
 
-  function handleInfoTooltipOpen() {
-    setIsInfoTooltipOpen(true);
-  }
+  // function handleInfoTooltipOpen() {
+  //   setIsInfoTooltipOpen(true);
+  // }
 
   // function handleLogin() {
   //   setLoggedIn(true);
@@ -199,7 +208,7 @@ export default function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         <div className="page__container">
-          <Header />
+          <Header userData={userData} logOut={logOut} />
           <Routes>
             <Route
               path="/"
@@ -226,7 +235,7 @@ export default function App() {
           </Routes>
 
           {/* <InfoTooltip
-            isOpen={handleInfoTooltipOpen}
+            isOpen={isInfoTooltipOpen}
             onClose={closeAllPopups}
             name={"tooltip"}
           /> */}

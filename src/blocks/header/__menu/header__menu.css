@@ -8,6 +8,7 @@
   transition: opacity 0.2s ease 0.1s;
   text-decoration: none;
   color: white;
+  text-decoration: none;
 }
 
 .header__menu:hover {
