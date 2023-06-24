@@ -1,5 +1,5 @@
 import logoMesto from "../images/header-logo.svg";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, Route, Routes } from "react-router-dom";
 
 export default function Header({ userData, logOut }) {
   const location = useLocation();
@@ -63,7 +63,6 @@ export default function Header({ userData, logOut }) {
               </>
             }
           ></Route>
-          
         </Routes> */}
       </div>
     </header>

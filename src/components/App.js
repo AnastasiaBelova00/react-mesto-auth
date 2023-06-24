@@ -66,6 +66,8 @@ export default function App() {
       .authorize(email, password)
       .then((data) => {
         localStorage.setItem("jwt", data.token);
+        setUserData(email);
+        setLoggedIn(true);
         navigate("/");
       })
       .catch((err) => {
@@ -82,8 +84,8 @@ export default function App() {
         if (!data) {
           return;
         }
-        setUserData(data.data.email);
         setLoggedIn(true);
+        setUserData(data.data.email);
         navigate("/");
       })
       .catch((err) => {
@@ -93,7 +95,6 @@ export default function App() {
 
   useEffect(() => {
     checkToken();
-    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -113,6 +114,13 @@ export default function App() {
   //   }
   // }
 
+  const openedPopups =
+    isAddPlacePopupOpen ||
+    isEditAvatarPopupOpen ||
+    isEditProfilePopupOpen ||
+    isInfoTooltipOpen ||
+    selectedCard;
+
   //закрытие на ESC
   useEffect(() => {
     const close = (evt) => {
@@ -120,16 +128,13 @@ export default function App() {
         closeAllPopups();
       }
     };
-    window.addEventListener("keydown", close);
-    return () => {
-      window.removeEventListener("keydown", close);
-    };
-  }, [
-    isAddPlacePopupOpen,
-    isEditAvatarPopupOpen,
-    isEditProfilePopupOpen,
-    isInfoTooltipOpen,
-  ]);
+    if (openedPopups) {
+      window.addEventListener("keydown", close);
+      return () => {
+        window.removeEventListener("keydown", close);
+      };
+    }
+  }, [openedPopups]);
 
   //открытие попапов
   function handleEditAvatarClick() {
