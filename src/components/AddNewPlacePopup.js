@@ -5,6 +5,7 @@ export default function AddNewPlacePopup(props) {
   const [title, setTitle] = useState("");
   const [link, setLink] = useState("");
 
+  //очистка инпутов
   useEffect(() => {
     setTitle("");
     setLink("");
@@ -39,7 +40,7 @@ export default function AddNewPlacePopup(props) {
     >
       <input
         name="title"
-        value={title || ""}
+        value={title}
         onChange={handleTitleChange}
         id="title"
         className="popup__input popup__input_el_name-card"
@@ -53,7 +54,7 @@ export default function AddNewPlacePopup(props) {
       <input
         name="link"
         id="link"
-        value={link || ""}
+        value={link}
         onChange={handleLinkChange}
         className="popup__input popup__input_el_link-card"
         type="url"

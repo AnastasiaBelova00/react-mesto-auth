@@ -6,6 +6,9 @@ export default function InfoTooltip({ isOpen, onClose, isRegistered }) {
   const title = isRegistered
     ? "Вы успешно зарегистрировались!"
     : "Что-то пошло не так! Попробуйте ещё раз";
+  const alt = isRegistered
+    ? "картинка удачной регистрации"
+    : "картинка неудачной регистрации";
   return (
     <div className={`popup ${isOpen ? "popup_opened" : ""}`} onClick={onClose}>
       <div className="popup__container" onClick={(e) => e.stopPropagation()}>
@@ -14,8 +17,8 @@ export default function InfoTooltip({ isOpen, onClose, isRegistered }) {
           onClick={onClose}
           type="button"
           aria-label="Кнопка закрытия"
-        ></button>
-        <img className="popup__tooltip-img" src={image} />
+        />
+        <img className="popup__tooltip-img" src={image} alt={alt} />
         <h2 className="popup__tooltip-title">{title}</h2>
       </div>
     </div>

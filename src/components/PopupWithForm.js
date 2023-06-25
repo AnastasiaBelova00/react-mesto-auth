@@ -13,9 +13,9 @@ export default function PopupWithForm({
   return (
     <div
       className={`popup popup_type_${name} ${isOpen ? "popup_opened" : ""}`}
-      onClick={onClose}
+      // onClick={onClose}
     >
-      <div className="popup__container" onClick={(e) => e.stopPropagation()}>
+      <div className="popup__container">
         <button
           className="popup__button-exit"
           onClick={onClose}

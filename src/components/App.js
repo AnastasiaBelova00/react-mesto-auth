@@ -16,7 +16,7 @@ import InfoTooltip from "./InfoTooltip";
 import * as auth from "../utils/auth";
 
 export default function App() {
-  const [currentUser, setCurrentUser] = useState("");
+  const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -36,7 +36,16 @@ export default function App() {
   //стейт для проверки регистрации
   const [isRegistered, setRegistered] = useState(false);
 
+  //навигация
   const navigate = useNavigate();
+
+  //константа открытых попапов
+  const openedPopups =
+    isAddPlacePopupOpen ||
+    isEditAvatarPopupOpen ||
+    isEditProfilePopupOpen ||
+    isInfoTooltipOpen ||
+    selectedCard;
 
   //выход
   function logOut() {
@@ -113,13 +122,6 @@ export default function App() {
   //     closeAllPopups();
   //   }
   // }
-
-  const openedPopups =
-    isAddPlacePopupOpen ||
-    isEditAvatarPopupOpen ||
-    isEditProfilePopupOpen ||
-    isInfoTooltipOpen ||
-    selectedCard;
 
   //закрытие на ESC
   useEffect(() => {
