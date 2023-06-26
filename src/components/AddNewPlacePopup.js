@@ -47,7 +47,7 @@ export default function AddNewPlacePopup(props) {
         type="text"
         placeholder="Название"
         minLength="2"
-        maxLength="40"
+        maxLength="30"
         required
       />
       <span className="popup__error title-error"></span>
